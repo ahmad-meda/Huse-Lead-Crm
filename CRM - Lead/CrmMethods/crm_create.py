@@ -8,7 +8,8 @@ def crm_create_lead(lead_id: int, crm_token: str):
     # Get the lead details from the draft id
     lead_details = LeadProxy.to_get_complete_by_id(complete_id=int(lead_id))
     print("Lead details:", lead_details)
-
+    employee_name = LeadProxy.get_employee_name_by_crm_token(crm_token=crm_token)
+    print("Employee name:", employee_name)
     # Check if lead_details is None
     if lead_details is None:
         print(f"Error: No lead found with ID {lead_id} or database connection issue")
@@ -19,7 +20,7 @@ def crm_create_lead(lead_id: int, crm_token: str):
 
     if lead_details is not None:
         # Parse the full name into first and last name
-        crm_data = build_crm_payload(lead_details)
+        crm_data = build_crm_payload(lead_details, employee_name)
         
         # Print the JSON data that will be sent
         print("CRM Data JSON:", json.dumps(crm_data, indent=2))
