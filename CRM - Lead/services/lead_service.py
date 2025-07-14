@@ -681,13 +681,21 @@ class LeadService:
             raise e
 
     @staticmethod
-    def _get_crm_token_by_employee_id(session: Session, employee_id: int) -> str:
+    def _get_crm_token_by_employee_database_id(session: Session, employee_id: int) -> str:
         try:
             crm_token = session.query(SalesTeam.crm_token).filter(
                 SalesTeam.employee_id == employee_id
-            ).one()[0]
+            ).one()[0]  # `one()` returns a tuple like (crm_token,), so use [0]
             
             return crm_token
 
+        except NoResultFound:
+            return None
+        
+    @staticmethod
+    def get_employee_name_by_crm_token(crm_token: str, db: Session):
+        try:
+            result = db.query(Employee.name).join(SalesTeam).filter(SalesTeam.crm_token == crm_token).one()
+            return result.name
         except NoResultFound:
             return None
