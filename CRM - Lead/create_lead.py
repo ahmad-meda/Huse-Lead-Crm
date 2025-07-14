@@ -17,7 +17,7 @@ def add_lead(messages: List[dict], contact_number:str):
     agent_id = LeadProxy.to_get_employee_database_id_by_contact(contact_number=contact_number)
     print(f"Employee Database ID: {agent_id}")
 
-    crm_token = LeadProxy._get_crm_token_by_employee_database_id(employee_database_id=agent_id)
+    crm_token = LeadProxy._get_crm_token_by_employee_id(employee_database_id=agent_id)
     print(f"CRM Token: {crm_token}")
 
     # Checks if there is draft Present in the database or else create a new one,this will be edited
