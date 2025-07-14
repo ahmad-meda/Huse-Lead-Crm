@@ -203,9 +203,14 @@ class LeadProxy:
         return LeadService.get_lead_by_id(db, lead_id)
     
     @staticmethod
-    def _get_crm_token_by_employee_id(employee_database_id: int):
+    def _get_crm_token_by_employee_database_id(employee_database_id: int):
         """
         Proxy function to get CRM token by employee database ID.
         """
         from app import db
-        return LeadService._get_crm_token_by_employee_id(db, employee_database_id)
+        return LeadService._get_crm_token_by_employee_database_id(db, employee_database_id)
+
+    @staticmethod
+    def get_employee_name_by_crm_token(crm_token: str):
+        from app import db
+        return LeadService.get_employee_name_by_crm_token(crm_token=crm_token, db=db)
