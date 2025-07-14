@@ -1,6 +1,6 @@
 from datetime import datetime
 
-def build_crm_payload(lead_details):
+def build_crm_payload(lead_details, employee_name):
     full_name = lead_details.get('full_legal_name', '')
     name_parts = full_name.split() if full_name else []
     first_name = name_parts[0] if name_parts else ''
@@ -57,7 +57,8 @@ def build_crm_payload(lead_details):
         "cPaMobileNumber": phone,
         "cStreetAddressStreet": lead_details.get('residential_address', ''),
         "cApplicantsName": full_name,
-        "cCompany": lead_details.get('company', '')
+        "cCompany": lead_details.get('company', ''),
+        "createdByName": employee_name,
     }
     
     crm_data = {k: v for k, v in crm_data.items() if v not in ('', None)}
