@@ -681,11 +681,11 @@ class LeadService:
             raise e
 
     @staticmethod
-    def _get_crm_token_by_employee_database_id(session: Session, employee_id: int) -> str:
+    def _get_crm_token_by_employee_id(session: Session, employee_id: int) -> str:
         try:
             crm_token = session.query(SalesTeam.crm_token).filter(
                 SalesTeam.employee_id == employee_id
-            ).one()[0]  # `one()` returns a tuple like (crm_token,), so use [0]
+            ).one()[0]
             
             return crm_token
 
