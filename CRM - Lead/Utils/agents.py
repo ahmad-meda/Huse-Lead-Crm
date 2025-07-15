@@ -18,7 +18,7 @@ def get_lead_details(messages, fields: list):
         ] + messages
 
         completion = client.beta.chat.completions.parse(
-            model="gemini-2.0-flash",
+            model="gpt-4o",
             messages=system_message,
             response_format=LeadAgent,
         )
@@ -72,7 +72,7 @@ def extract_data(messages):
     ] + messages
     
     completion = client.beta.chat.completions.parse(
-        model="gemini-2.0-flash",
+        model="gpt-4o",
         messages=extraction_messages,
         response_format=LeadData,
     )
@@ -110,7 +110,7 @@ def skipped_lead_details(messages, fields: list):
             ] + messages
 
             completion = client.beta.chat.completions.parse(
-                model="gemini-2.0-flash",
+                model="gpt-4o",
                 messages=skipped_messages,
                 response_format=SkippedDetails,
             )
@@ -151,7 +151,7 @@ def check_skip_all_optional(messages):
         ] + messages
 
         completion = client.beta.chat.completions.parse(
-            model="gemini-2.0-flash",
+            model="gpt-4o",
             messages=skip_all_messages,
             response_format=SkipAllOptional,
         )
@@ -182,7 +182,7 @@ def if_user_wants_to_refresh_draft(messages):
         ] + messages
 
         completion = client.beta.chat.completions.parse(
-            model="gemini-2.0-flash",
+            model="gpt-4o",
             messages=refresh_messages,
             response_format=UserWantsToRefreshDraft,
         )
@@ -203,7 +203,7 @@ def extracted_data_for_lead_state_allocation(messages):
        ] + messages
 
        completion = client.beta.chat.completions.parse(
-            model="gemini-2.0-flash",
+            model="gpt-4o",
             messages=extracted_data_for_lead_state_allocation_messages,
             response_format=ExtractedDataForLeadStateAllocation,
        )
@@ -224,7 +224,7 @@ def lead_state_allocation_agent(messages):
        ] + messages
 
        completion = client.beta.chat.completions.parse(
-            model="gemini-2.0-flash",
+            model="gpt-4o",
             messages=lead_state_allocation_agent_messages,
             response_format=LeadStateAllocationAgent,
        )
@@ -256,7 +256,7 @@ def choose_name_from_multiple_leads(messages: list, members: list):
         ] + messages
 
         completion = client.beta.chat.completions.parse(
-            model="gemini-2.0-flash",
+            model="gpt-4o",
             messages=choose_name_message,
             response_format=ChooseName,
         )
@@ -293,7 +293,7 @@ def get_lead_update_details(messages, fields: list):
         ] + messages
 
         completion = client.beta.chat.completions.parse(
-            model="gemini-2.0-flash",
+            model="gpt-4o",
             messages=system_message,
             response_format=AgentUpdateLead,
         )
@@ -314,7 +314,7 @@ def extract_data_to_update(messages, fields: list):
     ] + messages
 
     completion = client.beta.chat.completions.parse(
-        model="gemini-2.0-flash",
+        model="gpt-4o",
         messages=extraction_messages,
         response_format=UpdateLead,
     )
