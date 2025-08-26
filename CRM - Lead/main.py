@@ -28,8 +28,122 @@ app.config['JSON_SORT_KEYS'] = False
 
 
 
+@app.route("/", methods=["GET"])
+def read_root():
+    """
+    Health check endpoint
+    ---
+    tags:
+      - health
+    responses:
+      200:
+        description: API status
+        schema:
+          type: object
+          properties:
+            Hello:
+              type: string
+              example: "World"
+            status:
+              type: string
+              example: "API is running"
+    """
+    return jsonify({"Hello": "World", "status": "API is running"})
 
+huse_api_key = os.getenv("HUSE_API_KEY")
+
+@app.route("/create_lead/<contact_number>", methods=["POST"])
 def create_lead(contact_number):
+    """
+    Create a new lead in the CRM system
+    ---
+    tags:
+      - leads
+    parameters:
+      - name: contact_number
+        in: path
+        type: string
+        required: true
+        description: The contact number for the sales agent
+      - name: huse-api-key
+        in: header
+        type: string
+        required: true
+        description: API key for authentication
+      - name: body
+        in: body
+        required: true
+        description: Lead information
+        schema:
+          type: object
+          properties:
+            data:
+              type: object
+              properties:
+                full_legal_name:
+                  type: string
+                phone_number:
+                  type: string
+                email_address:
+                  type: string
+                suggested_membership_tier:
+                  type: string
+                company:
+                  type: string
+                lead_status:
+                  type: string
+              required:
+                - full_legal_name
+                - phone_number
+                - email_address
+                - suggested_membership_tier
+                - company
+                - lead_status
+          required:
+            - data
+    responses:
+      200:
+        description: Lead created successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            huse_response:
+              type: object
+            contact_number:
+              type: string
+            lead_data:
+              type: object
+      400:
+        description: Bad request - validation error or missing data
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Validation failed"
+            details:
+              type: array
+              items:
+                type: object
+      401:
+        description: Unauthorized - invalid or missing API key
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Unauthorized"
+      500:
+        description: Internal server error
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Internal server error: ..."
+    """
     try:
         # Check API key authentication
         api_key = request.headers.get("huse-api-key")
