@@ -4,6 +4,9 @@ import sys
 import os
 from create_lead_api import add_lead_in_crm
 from flasgger import Swagger
+
+# Load API key from environment variables
+API_KEY = os.getenv("HUSE_API_KEY")
 # Define a Pydantic model for the lead data
 class LeadData(BaseModel):
     full_legal_name: str
@@ -47,6 +50,7 @@ def read_root():
     """
     return jsonify({"Hello": "World", "status": "API is running"})
 
+huse_api_key = os.getenv("HUSE_API_KEY")
 
 @app.route("/create_lead/<contact_number>", methods=["POST"])
 def create_lead(contact_number):
@@ -61,7 +65,11 @@ def create_lead(contact_number):
         type: string
         required: true
         description: The contact number for the sales agent
-        
+      - name: huse-api-key
+        in: header
+        type: string
+        required: true
+        description: API key for authentication
       - name: body
         in: body
         required: true
@@ -119,6 +127,14 @@ def create_lead(contact_number):
               type: array
               items:
                 type: object
+      401:
+        description: Unauthorized - invalid or missing API key
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Unauthorized"
       500:
         description: Internal server error
         schema:
@@ -129,6 +145,13 @@ def create_lead(contact_number):
               example: "Internal server error: ..."
     """
     try:
+        # Check API key authentication
+        api_key = request.headers.get("huse-api-key")
+        print("Api key from headers, ", api_key)
+        print("Api key from env", API_KEY)
+        if api_key != API_KEY:
+            return jsonify({"error": "Unauthorized"}), 401
+            
         # Get JSON data from request
         json_data = request.get_json()
         
@@ -160,12 +183,12 @@ def create_lead(contact_number):
         # Call add_lead with all required parameters
         response = add_lead_in_crm(
             contact_number=contact_number,  # Sales agent's contact (from path)
-            full_name=lead_data.data.full_legal_name,
-            phone_number=lead_data.data.phone_number,  # Lead's phone number
-            email_address=lead_data.data.email_address,
-            suggested_membership_tier=lead_data.data.suggested_membership_tier,
-            company=lead_data.data.company,
-            lead_status=lead_data.data.lead_status
+            full_name=lead_data.full_legal_name,
+            phone_number=lead_data.phone_number,  # Lead's phone number
+            email_address=lead_data.email_address,
+            suggested_membership_tier=lead_data.suggested_membership_tier,
+            company=lead_data.company,
+            lead_status=lead_data.lead_status
         )
         
         # Check if the response indicates failure
@@ -179,12 +202,12 @@ def create_lead(contact_number):
             "huse_response": response,
             "contact_number": contact_number,
             "lead_data": {
-                "full_name": lead_data.data.full_legal_name,
-                "phone_number": lead_data.data.phone_number,
-                "email_address": lead_data.data.email_address,
-                "suggested_membership_tier": lead_data.data.suggested_membership_tier,
-                "company": lead_data.data.company,
-                "lead_status": lead_data.data.lead_status,
+                "full_name": lead_data.full_legal_name,
+                "phone_number": lead_data.phone_number,
+                "email_address": lead_data.email_address,
+                "suggested_membership_tier": lead_data.suggested_membership_tier,
+                "company": lead_data.company,
+                "lead_status": lead_data.lead_status,
                 "crm_response": response
             }
         })
