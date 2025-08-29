@@ -796,12 +796,13 @@ class LeadService:
     
     @staticmethod
     def get_employee_by_name(db: Session, name: str):
+        # if no employee is found then return False
         try:
             result = db.query(Employee).filter(Employee.name == name).first()
             if result:
                 return result
-            return None
+            return False
         except Exception as e:
             print(f"Error retrieving employee by name: {str(e)}")
-            return None
-        
+            return False
+                
