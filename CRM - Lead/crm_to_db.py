@@ -62,6 +62,29 @@ def crm_to_huse(crm_object):
         agent_id = None # this fields refres the crm id of the agent who created the lead wheres to save in db we need the db id of the agent who created the lead
         crm_backend_id = data.get("id")
         status = data.get("status")
+
+        print(f"full_legal_name: {name}")
+        print(f"preferred_nickname: {preferred_nickname}")
+        print(f"date_of_birth: {date_of_birth}")
+        print(f"nationality: {nationality}")
+        print(f"phone_number: {phone}")
+        print(f"email_address: {email}")
+        print(f"suggested_membership_tier: {suggested_membership_tier}")
+        print(f"residential_address: {residential_address}")
+        print(f"passport_number: {passport_number}")
+        print(f"id_number: {id_number}")
+        print(f"occupation: {occupation}")
+        print(f"job_title: {job_title}")
+        print(f"linkedin_or_website: {linkedin_or_website}")
+        print(f"education_background: {education_background}")
+        print(f"notable_affiliations: {notable_affiliations}")
+        print(f"lead_comments: {lead_comments}")
+        print(f"approval_status: {approval_status}")
+        print(f"lead_status: {lead_status}")
+        print(f"company: {company}")
+        print(f"agent_id: {agent_id}")
+        print(f"crm_backend_id: {crm_backend_id}")
+        print(f"status: {status}")
         
         # Add lead to database with all fields
         result = LeadProxy.add_lead(
