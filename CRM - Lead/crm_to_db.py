@@ -33,6 +33,12 @@ def crm_to_huse(crm_object):
             data = crm_object["lead_create_response"]["data"]
         else:
             raise KeyError("Could not find data in CRM object. Expected either 'data' or 'lead_create_response.data'")
+
+        agent_id = LeadProxy.get_employee_by_name(data.get("createdByName"))
+        # if there is no agent_id then use a default one named admin
+        if agent_id is False:
+            agent_id = LeadProxy.get_employee_by_name("Default Admin Agent").database_id
+            print("agent_id", agent_id)
         
         # Extract required fields with fallbacks
         name = data.get("name") or data.get("cFullName")
@@ -44,7 +50,7 @@ def crm_to_huse(crm_object):
         suggested_membership_tier = data.get("cMembershipCategory")
         
         # Handle residential address (not in sample data, so provide fallback)
-        residential_address = data.get("cResidentialAddress")
+        residential_address = None
         
         # Extract optional fields (only using fields that actually exist in the CRM object)
         company = data.get("cCompany")
