@@ -27,9 +27,11 @@ def crm_to_huse(crm_object):
         
         print("Processing CRM object:", crm_object)
         
-        # Get details from crm object
-        data = crm_object["lead_create_response"]["data"]
-        if data is None:
+        if "data" in crm_object:
+            data = crm_object["data"]
+        elif "lead_create_response" in crm_object and "data" in crm_object["lead_create_response"]:
+            data = crm_object["lead_create_response"]["data"]
+        else:
             raise KeyError("Could not find data in CRM object. Expected either 'data' or 'lead_create_response.data'")
         
         # Extract required fields with fallbacks
