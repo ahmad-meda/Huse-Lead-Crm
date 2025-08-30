@@ -1,6 +1,7 @@
 import json
 from proxies.lead_proxy import LeadProxy
 
+
 # Add details from crm object to db
 
 # OLD FORMAT --
@@ -34,11 +35,18 @@ def crm_to_huse(crm_object):
         else:
             raise KeyError("Could not find data in CRM object. Expected either 'data' or 'lead_create_response.data'")
 
-        agent_id = LeadProxy.get_employee_by_name(data.get("createdByName"))
-        # if there is no agent_id then use a default one named admin
-        if agent_id is False:
-            agent_id = LeadProxy.get_employee_by_name("Default Admin Agent").database_id
-            print("agent_id", agent_id)
+        # Import EmployeeProxy Here ------>
+        company_id = EmployeeProxy.get_company_id_by_name("HUSE System")
+        print("company_id", company_id)
+        
+        group_id = EmployeeProxy.get_group_id_by_name("HUSE Group Internal")
+        print("group_id", group_id)
+        
+        sales_employee, error_dict = EmployeeProxy.get_employee_record_by_name("System", company_id, group_id)
+        agent_id = sales_employee.id
+
+        print(agent_id)
+        
         
         # Extract required fields with fallbacks
         name = data.get("name") or data.get("cFullName")
