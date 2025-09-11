@@ -2,41 +2,32 @@ import json
 from proxies.lead_proxy import LeadProxy
 
 
-# Add details from crm object to db
-
-# OLD FORMAT --
-crm_object = {'message': 'Lead created in CRM successfully', 'data': {'id': '68aff76b5c13065b8', 'name': 'Alexander Benjamin Rodriguez-Chen', 'deleted': False, 'firstName': 'Alexander', 'lastName': 'Benjamin Rodriguez-Chen', 'status': 'New', 'emailAddress': 'alex.rodriguez.chen@techcorp.com', 'phoneNumber': '+15550123', 'doNotCall': False, 'createdAt': '2025-08-28 06:30:03', 'modifiedAt': '2025-08-28 06:30:03', 'targetListIsOptedOut': False, 'cPreferredName': 'Alex', 'cApplicationDate': '2025-08-28', 'cGender': 'Male', 'cMembershipCategory': 'The Rufescent Business', 'cNationality': 'American Samoa', 'cDateOfBirth': '1985-03-15', 'cMaritalStatus': 'Single', 'cIdType': 'Emirates ID', 'cIdNumber': 'SSN-987-65-4321', 'cFullName': 'Alexander Benjamin Rodriguez-Chen', 'cJobTitle': 'Chief Technology Officer', 'cCompany': 'TechCorp Innovations', 'cEmailAddress': 'alex.rodriguez.chen@techcorp.com', 'cPaMobileNumber': '+1-555-0123', 'cPaymentsMembershipCategory': 'The Rufescent Business', 'cMembershipAccountSettlementMethod': 'Time of consumption', 'cApplicantsName': 'Alexander Benjamin Rodriguez-Chen', 'cSignature': False, 'cLeadStatus': 'Hot', 'cWhichAspectsAreMostValuableToYou': [], 'cIWishToSettleMyMembershipAccountBy': [], 'cApprovalStatus': 'pending', 'cSpouseInformation': False, 'cIsPaInformation': False, 'cCPaymentMethod': 'G-Pay, Apple Pay, Card', 'cIsformsubmitted': False, 'emailAddressIsOptedOut': False, 'emailAddressIsInvalid': False, 'phoneNumberIsOptedOut': False, 'phoneNumberIsInvalid': False, 'streamUpdatedAt': '2025-08-28 06:30:03', 'emailAddressData': [{'emailAddress': 'alex.rodriguez.chen@techcorp.com', 'lower': 'alex.rodriguez.chen@techcorp.com', 'primary': True, 'optOut': False, 'invalid': False}], 'phoneNumberData': [{'phoneNumber': '+15550123', 'type': 'Mobile', 'primary': True, 'optOut': False, 'invalid': False}], 'createdById': '684882bb7d1285cb4', 'createdByName': 'Ahmad Meda', 'modifiedByName': None, 'assignedUserName': None, 'teamsIds': [], 'teamsNames': {}, 'campaignName': None, 'createdAccountName': None, 'createdContactName': None, 'createdOpportunityName': None, 'isFollowed': False, 'followersIds': [], 'followersNames': {}, 'profile_image': None, 'document_attachments': None, 'signature': None}, 'lead_form_url': 'https://dev-rufescent-experience.rufescent.com?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsZWFkX2lkIjoiNjhhZmY3NmI1YzEzMDY1YjgifQ.qUWkWY3JSON8yte-LlSRK6nB-HDa386y0waTmWKCE-I', 'aml_result_url': 'https://aml-pt2u.vercel.app/result?crm_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsZWFkX2lkIjoiNjhhZmY3NmI1YzEzMDY1YjgifQ.qUWkWY3JSON8yte-LlSRK6nB-HDa386y0waTmWKCE-I', 'failure': False}
-
-
-# NEW FORMAT --
-crm_object = {"lead_create_response": {'message': 'Lead created in CRM successfully', 'data': {'id': '68b00384acc17908c', 'name': 'Isabella Marie Thompson', 'deleted': False, 'firstName': 'Isabella', 'lastName': 'Marie Thompson', 'status': 'New', 'emailAddress': 'bella.thompson@innoventures.com', 'phoneNumber': '+14167894567', 'doNotCall': False, 'createdAt': '2025-08-28 07:21:40', 'modifiedAt': '2025-08-28 07:21:40', 'targetListIsOptedOut': False, 'cPreferredName': 'Bella', 'cApplicationDate': '2025-08-28', 'cGender': 'Male', 'cMembershipCategory': 'The Rufescent Business', 'cNationality': 'Canada', 'cDateOfBirth': '1990-07-22', 'cMaritalStatus': 'Single', 'cIdType': 'Emirates ID', 'cIdNumber': 'SSN-987-65-4321', 'cFullName': 'Isabella Marie Thompson', 'cJobTitle': 'Chief Technology Officer', 'cCompany': 'TechCorp Innovations', 'cEmailAddress': 'bella.thompson@innoventures.com', 'cPaMobileNumber': '+1-416-789-4567', 'cPaymentsMembershipCategory': 'The Rufescent Business', 'cMembershipAccountSettlementMethod': 'Time of consumption', 'cApplicantsName': 'Isabella Marie Thompson', 'cSignature': False, 'cLeadStatus': 'Hot', 'cWhichAspectsAreMostValuableToYou': [], 'cIWishToSettleMyMembershipAccountBy': [], 'cApprovalStatus': 'pending', 'cSpouseInformation': False, 'cIsPaInformation': False, 'cCPaymentMethod': 'G-Pay, Apple Pay, Card', 'cIsformsubmitted': False, 'emailAddressIsOptedOut': False, 'emailAddressIsInvalid': False, 'phoneNumberIsOptedOut': False, 'phoneNumberIsInvalid': False, 'streamUpdatedAt': '2025-08-28 07:21:40', 'emailAddressData': [{'emailAddress': 'bella.thompson@innoventures.com', 'lower': 'bella.thompson@innoventures.com', 'primary': True, 'optOut': False, 'invalid': False}], 'phoneNumberData': [{'phoneNumber': '+14167894567', 'type': 'Mobile', 'primary': True, 'optOut': False, 'invalid': False}], 'createdById': '684882bb7d1285cb4', 'createdByName': 'Admin', 'modifiedByName': None, 'assignedUserName': None, 'teamsIds': [], 'teamsNames': {}, 'campaignName': None, 'createdAccountName': None, 'createdContactName': None, 'createdOpportunityName': None, 'isFollowed': False, 'followersIds': [], 'followersNames': {}, 'profile_image': None, 'document_attachments': None, 'signature': None}, 'lead_form_url': 'https://dev-rufescent-experience.rufescent.com?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsZWFkX2lkIjoiNjhiMDAzODRhY2MxNzkwOGMifQ.cCJAijJT76TDknfDZwdsHDaZKWHcobiNDpuku6ZPyLQ', 'aml_result_url': 'https://aml-pt2u.vercel.app/result?crm_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsZWFkX2lkIjoiNjhiMDAzODRhY2MxNzkwOGMifQ.cCJAijJT76TDknfDZwdsHDaZKWHcobiNDpuku6ZPyLQ', 'failure': False}, "lead_created_destination":"membership_form"}
-
-
-
-def crm_to_huse(crm_object):
-    """
-    Convert CRM object to Huse database format and add lead.
-    
-    Args:
-        crm_object: JSON string or dict containing CRM lead data
-    """
+def crm_to_huse(name: str, phone: str, email: str, suggested_membership_tier: str, company: str, lead_status: str,
+                preferred_nickname=None, date_of_birth=None, nationality=None, residential_address=None, passport_number=None, id_number=None,
+                occupation=None, job_title=None, linkedin_or_website=None, education_background=None, notable_affiliations=None, 
+                lead_comments=None, approval_status=None, crm_backend_id=None, status=None):
     try:
+        # Validate compulsory fields
+        compulsory_fields = {
+            'name': name,
+            'phone': phone,
+            'email': email,
+            'suggested_membership_tier': suggested_membership_tier,
+            'company': company,
+            'lead_status': lead_status
+        }
+        
+        missing_fields = []
+        for field_name, field_value in compulsory_fields.items():
+            if field_value is None or (isinstance(field_value, str) and field_value.strip() == ""):
+                missing_fields.append(field_name)
+        
+        if missing_fields:
+            raise ValueError(f"Missing compulsory fields: {', '.join(missing_fields)}. All compulsory fields must be provided and cannot be empty.")
+        
         # Handle both string and dict inputs
-        if isinstance(crm_object, str):
-            crm_object = json.loads(crm_object)
-            print("json version of crm_object", crm_object)
-        
-        print("Processing CRM object:", crm_object)
-        
-        if "data" in crm_object:
-            data = crm_object["data"]
-        elif "lead_create_response" in crm_object and "data" in crm_object["lead_create_response"]:
-            data = crm_object["lead_create_response"]["data"]
-        else:
-            raise KeyError("Could not find data in CRM object. Expected either 'data' or 'lead_create_response.data'")
 
-        # Import EmployeeProxy Here ------>
-        company_id = EmployeeProxy.get_company_id_by_name("HUSE System")
+        company_id = EmployeeProxy.get_company_by_name_only("HUSE System")
         print("company_id", company_id)
         
         group_id = EmployeeProxy.get_group_id_by_name("HUSE Group Internal")
@@ -44,39 +35,10 @@ def crm_to_huse(crm_object):
         
         sales_employee, error_dict = EmployeeProxy.get_employee_record_by_name("System", company_id, group_id)
         agent_id = sales_employee.id
+        
+        print("sales_employee", sales_employee)
 
-        print(agent_id)
-        
-        
-        # Extract required fields with fallbacks
-        name = data.get("name") or data.get("cFullName")
-        preferred_nickname = data.get("cPreferredName") 
-        email = data.get("emailAddress") or data.get("cEmailAddress")
-        phone = data.get("phoneNumber") or data.get("cPaMobileNumber")
-        date_of_birth = data.get("cDateOfBirth")
-        nationality = data.get("cNationality")
-        suggested_membership_tier = data.get("cMembershipCategory")
-        
-        # Handle residential address (not in sample data, so provide fallback)
-        residential_address = None
-        
-        # Extract optional fields (only using fields that actually exist in the CRM object)
-        company = data.get("cCompany")
-        lead_status = data.get("cLeadStatus") 
-        approval_status = data.get("cApprovalStatus")
-        conversion_status = None  # Field doesn't exist in CRM
-        passport_number = None  # Field doesn't exist in CRM
-        id_number = data.get("cIdNumber")
-        occupation = data.get("cJobTitle")
-        job_title = data.get("cJobTitle")
-        linkedin_or_website = None  # Field doesn't exist in CRM
-        education_background = None  # Field doesn't exist in CRM
-        notable_affiliations = None  # Field doesn't exist in CRM
-        lead_comments = None  # Field doesn't exist in CRM
-        agent_id = None # this fields refres the crm id of the agent who created the lead wheres to save in db we need the db id of the agent who created the lead
-        crm_backend_id = data.get("id")
-        status = data.get("status")
-
+        # print all the fields
         print(f"full_legal_name: {name}")
         print(f"preferred_nickname: {preferred_nickname}")
         print(f"date_of_birth: {date_of_birth}")
@@ -99,7 +61,7 @@ def crm_to_huse(crm_object):
         print(f"agent_id: {agent_id}")
         print(f"crm_backend_id: {crm_backend_id}")
         print(f"status: {status}")
-        
+
         # Add lead to database with all fields
         result = LeadProxy.add_lead(
             full_legal_name=name,
@@ -185,12 +147,4 @@ def crm_to_huse(crm_object):
     except Exception as e:
         print(f"Error processing CRM object: {e}")
         raise
-
-
-
-
-
-
-#test the function
-# print(crm_to_huse(crm_object))
 
