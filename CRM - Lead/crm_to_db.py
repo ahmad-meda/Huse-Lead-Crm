@@ -27,7 +27,7 @@ def crm_to_huse(name: str, phone: str, email: str, suggested_membership_tier: st
         
         # Handle both string and dict inputs
 
-        company_id = EmployeeProxy.get_company_by_name_only("HUSE System")
+        company_id = EmployeeProxy.get_company_by_name("HUSE System")
         print("company_id", company_id)
         
         group_id = EmployeeProxy.get_group_id_by_name("HUSE Group Internal")
