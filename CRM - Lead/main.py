@@ -31,6 +31,29 @@ class CrmRequest(BaseModel):
     aml_result_url: str = None
     failure: bool = False
 
+class CrmToHuseData(BaseModel):
+    name: str
+    phone: str
+    email: str
+    suggested_membership_tier: str
+    company: str
+    lead_status: str
+    preferred_nickname: str = None
+    date_of_birth: str = None
+    nationality: str = None
+    residential_address: str = None
+    passport_number: str = None
+    id_number: str = None
+    occupation: str = None
+    job_title: str = None
+    linkedin_or_website: str = None
+    education_background: str = None
+    notable_affiliations: str = None
+    lead_comments: str = None
+    approval_status: str = None
+    crm_backend_id: str = None
+    status: str = None
+
 # Create Flask app0       
 app = Flask(__name__)
 swagger = Swagger(app)
@@ -230,30 +253,67 @@ def create_lead(contact_number):
 
 @app.route("/crm_to_huse", methods=["POST"])
 def crm_to_huse_api():
-    # 1. Check API key authentication
-    api_key = request.headers.get("huse-api-key")
-    print("Api key from headers:", api_key)
-    print("Api key from env:", API_KEY)
-    if api_key != API_KEY:
-        return jsonify({"error": "Unauthorized"}), 401
-
-    # 2. Parse JSON from request
     try:
-        crm_dict = request.get_json(force=False, silent=False)
-        if crm_dict is None:
-            return jsonify({"error": "Invalid JSON: 'Content-Type' header missing or body is not JSON."}), 400
-
-        print(f"Successfully parsed JSON with keys: {list(crm_dict.keys())}")
-
-        # 3. Process with your existing function
-        huse_response = crm_to_huse(crm_dict)
-
+        # Check API key authentication
+        api_key = request.headers.get("huse-api-key")
+        if api_key != API_KEY:
+            return jsonify({"error": "Unauthorized"}), 401
+            
+        # Get JSON data from request
+        json_data = request.get_json()
+        
+        if not json_data:
+            return jsonify({"error": "No JSON data provided"}), 400
+        
+        # Validate using Pydantic model
+        try:
+            lead_data = CrmToHuseData(**json_data)
+        except ValidationError as e:
+            return jsonify({
+                "error": "Validation failed",
+                "details": e.errors()
+            }), 400
+            
+        print(f"Adding lead to Huse database: {lead_data.name}")
+        
+        # Call crm_to_huse function with all parameters
+        huse_response = crm_to_huse(
+            name=lead_data.name,
+            phone=lead_data.phone,
+            email=lead_data.email,
+            suggested_membership_tier=lead_data.suggested_membership_tier,
+            company=lead_data.company,
+            lead_status=lead_data.lead_status,
+            preferred_nickname=lead_data.preferred_nickname,
+            date_of_birth=lead_data.date_of_birth,
+            nationality=lead_data.nationality,
+            residential_address=lead_data.residential_address,
+            passport_number=lead_data.passport_number,
+            id_number=lead_data.id_number,
+            occupation=lead_data.occupation,
+            job_title=lead_data.job_title,
+            linkedin_or_website=lead_data.linkedin_or_website,
+            education_background=lead_data.education_background,
+            notable_affiliations=lead_data.notable_affiliations,
+            lead_comments=lead_data.lead_comments,
+            approval_status=lead_data.approval_status,
+            crm_backend_id=lead_data.crm_backend_id,
+            status=lead_data.status
+        )
+        
+        # Check if the response indicates failure
+        if isinstance(huse_response, dict) and huse_response.get("failure"):
+            return jsonify({
+                "error": huse_response.get("error", "Failed to add lead to Huse database")
+            }), 400
+        
         return jsonify({
-            "message": "Successfully converted CRM object to Huse database",
+            "message": "Successfully added lead to Huse database",
             "huse_response": huse_response
         })
-
+        
     except Exception as e:
+        print(f"Error in crm_to_huse_api: {str(e)}")
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
 
