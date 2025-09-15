@@ -36,23 +36,23 @@ class CrmToHuseData(BaseModel):
     phone: str
     email: str
     suggested_membership_tier: str
-    company: str
     lead_status: str
-    preferred_nickname: str = None
-    date_of_birth: str = None
-    nationality: str = None
-    residential_address: str = None
-    passport_number: str = None
-    id_number: str = None
-    occupation: str = None
-    job_title: str = None
-    linkedin_or_website: str = None
-    education_background: str = None
-    notable_affiliations: str = None
-    lead_comments: str = None
-    approval_status: str = None
-    crm_backend_id: str = None
-    status: str = None
+    company: Optional[str] = None
+    preferred_nickname: Optional[str] = None
+    date_of_birth: Optional[str] = None
+    nationality: Optional[str] = None
+    residential_address: Optional[str] = None
+    passport_number: Optional[str] = None
+    id_number: Optional[str] = None
+    occupation: Optional[str] = None
+    job_title: Optional[str] = None
+    linkedin_or_website: Optional[str] = None
+    education_background: Optional[str] = None
+    notable_affiliations: Optional[str] = None
+    lead_comments: Optional[str] = None
+    approval_status: Optional[str] = None
+    crm_backend_id: Optional[str] = None
+    status: Optional[str] = None
 
 # Create Flask app0       
 app = Flask(__name__)
