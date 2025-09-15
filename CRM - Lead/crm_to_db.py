@@ -2,7 +2,7 @@ import json
 from proxies.lead_proxy import LeadProxy
 
 
-def crm_to_huse(name: str, phone: str, email: str, suggested_membership_tier: str, company: str, lead_status: str,
+def crm_to_huse(name: str, phone: str, email: str, suggested_membership_tier: str, lead_status: str, company: str = None,
                 preferred_nickname=None, date_of_birth=None, nationality=None, residential_address=None, passport_number=None, id_number=None,
                 occupation=None, job_title=None, linkedin_or_website=None, education_background=None, notable_affiliations=None, 
                 lead_comments=None, approval_status=None, crm_backend_id=None, status=None):
@@ -13,8 +13,7 @@ def crm_to_huse(name: str, phone: str, email: str, suggested_membership_tier: st
             'phone': phone,
             'email': email,
             'suggested_membership_tier': suggested_membership_tier,
-            'company': company,
-            'lead_status': lead_status
+            'lead_status': lead_status,
         }
         
         missing_fields = []
