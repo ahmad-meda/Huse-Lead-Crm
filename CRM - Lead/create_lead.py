@@ -33,6 +33,33 @@ def add_lead(messages: List[dict], contact_number:str):
         user_input = input("User: ") # Start with user Input
         messages.append({"role": "user", "content": user_input}) # add it to history
 
+        lead_record = LeadProxy.get_lead_record(lead_id=draft_id)
+
+        # Convert lead record to dictionary for LLM
+        lead_record_dict = {
+            "full_legal_name": lead_record.full_legal_name,
+            "preferred_nickname": lead_record.preferred_nickname,
+            "date_of_birth": lead_record.date_of_birth,
+            "nationality": lead_record.nationality,
+            "phone_number": lead_record.phone_number,
+            "email_address": lead_record.email_address,
+            "lead_status": lead_record.lead_status,
+            "suggested_membership_tier": lead_record.suggested_membership_tier,
+            "residential_address": lead_record.residential_address,
+            "passport_number": lead_record.passport_number,
+            "id_number": lead_record.id_number,
+            "occupation": lead_record.occupation,
+            "job_title": lead_record.job_title,
+            "linkedin_or_website": lead_record.linkedin_or_website,
+            "education_background": lead_record.education_background,
+            "notable_affiliations": lead_record.notable_affiliations,
+            "lead_comments": lead_record.lead_comments,
+            "company": lead_record.company
+        }
+
+        print(f"Lead record dictionary: {lead_record_dict}")
+        extracted_data = extract_data(messages=messages, list_of_fields=lead_record_dict)
+
         extracted_data = extract_data(messages=messages) # extract whatever fields are mentioned, this will extract whetevr fields are given by the user regardless of what the bot has asked.
         # print(extracted_data)
 
@@ -68,4 +95,5 @@ def add_lead(messages: List[dict], contact_number:str):
 
 
 #test code
+
 add_lead(messages=[], contact_number="+971509565289")
