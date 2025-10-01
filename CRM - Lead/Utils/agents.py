@@ -25,12 +25,17 @@ def get_lead_details(messages, fields: list):
         return completion.choices[0].message.parsed
 
 # Function to extract lead details
-def extract_data(messages):
+def extract_data(messages, list_of_fields: dict):
     extraction_messages = [
         {
             "role": "system",
             "content": (
-                """Extract ALL lead information from the ENTIRE conversation history. 
+                f"""Extract ALL lead information from the ENTIRE conversation history. 
+
+                Here is the lead record: {list_of_fields}
+                From this conversation, extract the fields that are empty and the fields that are provided by the user.
+                    
+            IMPORTANT: Only extract NEW information that the user is providing in their current message.
             
             IMPORTANT RULES:
             - Include ALL details mentioned at ANY point in the conversation
