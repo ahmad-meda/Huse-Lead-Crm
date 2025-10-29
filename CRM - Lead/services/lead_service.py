@@ -3,6 +3,7 @@ from Files.SQLAlchemyModels import Member, Employee, Approval, SalesTeam, Sessio
 from sqlalchemy.exc import NoResultFound
 from datetime import datetime
 from typing import Optional, Tuple, List
+import re
 
 
 
@@ -99,6 +100,11 @@ class LeadService:
                         except ValueError:
                             print(f"Invalid date format for {field_name}: {value}")
                             continue
+                    
+                    # Handle phone number validation
+                    if field_name == 'phone_number':
+                        value = None if value is None else re.sub(r'[^\d]', '', str(value))
+                    
                     update_data[field_name] = value
             
             if not update_data:
@@ -791,18 +797,30 @@ class LeadService:
         except Exception as e:
             # Rollback on error
             db.rollback()
+            print(f"Error adding lead to database: {str(e)}")
             raise Exception(f"Error adding lead to database: {str(e)}") from e
         
     
     @staticmethod
     def get_employee_by_name(db: Session, name: str):
-        # if no employee is found then return False
+        # if no employee is found then return false
         try:
             result = db.query(Employee).filter(Employee.name == name).first()
             if result:
                 return result
-            return False
+            return None
         except Exception as e:
             print(f"Error retrieving employee by name: {str(e)}")
-            return False
-                
+            return None
+        
+    @staticmethod
+    def get_lead_record(db: Session, lead_id: int):
+        try:
+            result = db.query(Member).filter(Member.id == lead_id).first()
+            if result:
+                return result
+            return None
+        except Exception as e:
+            print(f"Error retrieving lead record: {str(e)}")
+            return None
+        
