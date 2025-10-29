@@ -25,8 +25,9 @@ def build_crm_payload(lead_details, employee_name):
     phone = lead_details.get('phone_number', '')
     phone_data = []
     if phone:
+        phone_with_prefix = f"+{phone}" if not phone.startswith('+') else phone
         phone_data = [{
-            "phoneNumber": phone,
+            "phoneNumber": phone_with_prefix,
             "primary": True,
             "type": "Mobile",
             "optOut": False,
@@ -49,12 +50,12 @@ def build_crm_payload(lead_details, employee_name):
         "emailAddressData": email_data,
         "emailAddress": email,
         "phoneNumberData": phone_data,
-        "phoneNumber": phone,
+        "phoneNumber": phone_with_prefix if phone else phone,
         "cFullName": full_name,
         "cLeadStatus": lead_details.get('lead_status', ''),
         "cJobTitle": lead_details.get('job_title', ''),
         "cEmailAddress": email,
-        "cPaMobileNumber": phone,
+        "cPaMobileNumber": phone_with_prefix if phone else phone,
         "cStreetAddressStreet": lead_details.get('residential_address', ''),
         "cApplicantsName": full_name,
         "cCompany": lead_details.get('company', ''),
