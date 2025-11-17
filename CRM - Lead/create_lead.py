@@ -76,11 +76,36 @@ def add_lead(messages: List[dict], contact_number:str):
         print(f"current field: {current_field}")
         if current_field is None and len(remaining_fields) == 0: #When all fields have been asked # Change the status of the lead to New.
             crm_token = LeadProxy._get_crm_token_by_employee_database_id(employee_database_id=agent_id)
-            crm_success = crm_create_lead(lead_id=draft_id, crm_token=crm_token) # After all the fields are given to the user, we create a new lead in the CRM  Backend.
-            if not crm_success.get("failure"): # Check if the 'failure' key is False or absent (indicating success)
+            try:
+                crm_success = crm_create_lead(lead_id=draft_id, crm_token=crm_token) # After all the fields are given to the user, we create a new lead in the CRM  Backend.
+            except Exception as e:
+                print(f"Error creating lead in CRM: {str(e)}")
+                print(f"Unexpected error occurred while adding lead: {str(e)}")
+                user_message = f"Failed to create lead in CRM due to error."
+                send_whatsapp_message(contact_number, user_message)
+                return False
+            
+            # Validate that crm_success is a dictionary
+            if not isinstance(crm_success, dict):
+                error_msg = f"Invalid response type from CRM: expected dict, got {type(crm_success).__name__}. Response: {str(crm_success)}"
+                print(f"Error: {error_msg}")
+                print(f"Unexpected error occurred while adding lead: {error_msg}")
+                user_message = f"Failed to create lead in CRM due to error."
+                send_whatsapp_message(contact_number, user_message)
+                return False
+            
+            # Check if the 'failure' key is False or absent (indicating success)
+            if not crm_success.get("failure", False):
                 LeadProxy.to_complete_draft(draft_id=draft_id)
                 # print("Lead created successfully in CRM")
                 return True
+            else:
+                error_msg = crm_success.get("error") or crm_success.get("detail") or "Unknown error from CRM"
+                print(f"Failed to create lead in CRM: {error_msg}")
+                print(f"Unexpected error occurred while adding lead: {error_msg}")
+                user_message = f"Failed to create lead in CRM due to error."
+                send_whatsapp_message(contact_number, user_message)
+                return False
             # else:
             #     print("Failed to create lead in CRM, trying again")
             #     continue
