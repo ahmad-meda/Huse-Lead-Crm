@@ -126,6 +126,8 @@ class LeadService:
             return False
 
 
+    
+
     @staticmethod
     def complete_draft(draft_id: int, db: Session) -> bool:
         """
@@ -148,6 +150,10 @@ class LeadService:
             if not draft:
                 print(f"No draft found with ID: {draft_id}")
                 return False
+            
+            # Set created_on if it's not already set (for backward compatibility with existing records)
+            if draft.created_on is None:
+                draft.created_on = datetime.now(timezone.utc)
             
             # Update status to complete
             draft.status = 'New'
