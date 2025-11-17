@@ -39,6 +39,8 @@ class Member(Base):
     approval_status = Column(String, nullable=False, default="Pending")
     company = Column(String, nullable=True)
     crm_backend_id = Column(String, nullable=True)
+    created_on = Column(DateTime, nullable=False, server_default=func.now())
+
 
 
     def __repr__(self):
