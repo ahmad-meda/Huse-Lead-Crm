@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from Files.SQLAlchemyModels import Member, Employee, Approval, SalesTeam, SessionLocal
 from sqlalchemy.exc import NoResultFound
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Tuple, List
 import re
 
