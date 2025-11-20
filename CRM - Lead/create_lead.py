@@ -107,8 +107,11 @@ def add_lead(user_message, contact_number, session_id=None):
 
     error_string = ""
     try:
-        if not result["success"]:
-            error_string = ", ".join(result['errors'])
+        # Validation: Ensure result is a dictionary before accessing keys
+        if not isinstance(result, dict):
+            print(f"Warning: to_update_draft returned unexpected type: {type(result)}, value: {result}")
+        elif not result.get("success", True):
+            error_string = ", ".join(result.get('errors', []))
             print("Error Strings", error_string)
     except Exception as e:
         print("Exception", e)
@@ -132,8 +135,18 @@ def add_lead(user_message, contact_number, session_id=None):
             try:
                 print("Creating lead in CRM++++++++++++++")
                 json, status_code = crm_create_lead(draft_id)
+                
+                # Validation: Ensure json is a dictionary, not a string or other type
+                if not isinstance(json, dict):
+                    print(f"CRM returned unexpected type: {type(json)}, value: {json}")
+                    LeadProxy.revert_status(draft_id)
+                    err_msg = f"Unexpected error occurred while adding lead: CRM returned invalid response format. The CRM might be down or experiencing issues."
+                    LeadMessageHistoryProxy.save_message(contact_number, "assistant", err_msg, session_id)
+                    send_whatsapp_message(contact_number, err_msg)
+                    return
+                
                 form_link = json.get('lead_form_url')
-                id = json.get('data', {}).get('id')
+                id = json.get('data', {}).get('id') if isinstance(json.get('data'), dict) else None
                 print(id, "Id")
                 print("form link", form_link)
                 # 13. If all fields done, complete the lead and cleanup
@@ -143,12 +156,17 @@ def add_lead(user_message, contact_number, session_id=None):
                 lead_id = LeadProxy.assign_crm_backend_id(draft_id, id)
                 print("CRM Backend id added", lead_id)
 
+                # Validation: Check json structure before accessing nested keys
+                detail_check = False
+                if "detail" in json and isinstance(json.get("detail"), dict):
+                    message_translation = json["detail"].get("messageTranslation", {})
+                    if isinstance(message_translation, dict):
+                        detail_check = message_translation.get("label") == "validationFailure"
+                
                 is_success = (
                         status_code == 200 and
                         not json.get('failure', False)
-                        and not (
-                        "detail" in json and
-                        json["detail"].get("messageTranslation", {}).get("label") == "validationFailure")
+                        and not detail_check
                 )
 
                 print("status_code:", status_code)
